@@ -68,7 +68,7 @@
                   <td th:text="${encabezadoPedido.descuento}"></td>
                   <td th:text="${encabezadoPedido.fechaEntrega}"></td>
                   <td th:text="${encabezadoPedido.estado}"></td>
-                  <td><a th:href="@{/formpedido/} + ${encabezadoPedido.idEncabezadoPedido}" class="btn btn-primary btn-xs">Editar</a></td>
+                  <td><a th:href="@{/formpedido/} + ${encabezadoPedido.idencabezadoPedido}" class="btn btn-primary btn-xs">Editar</a></td>
                   <td><a th:href="@{/eliminarPedidos/} + ${encabezadoPedido.idEncabazadoPedido}" class="btn btn-danger btn-xs" onclick="return confirm('¿Seguro que desea eliminar?')">Eliminar</a></td>
                 </tr>
               </tbody>

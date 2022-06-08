@@ -19,7 +19,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity 
 @Table(name = "encabezadoPedido")
 public class EncabezadoPedido implements Serializable{
+    
     private static final long serialVersionUID = 1L;
+
 
     @Id
     @Column(name = "id_encabezado_pedido")
@@ -58,9 +60,9 @@ public class EncabezadoPedido implements Serializable{
     private int descuento;
 
     @NotNull
+    @Column(name = "fecha_entrega")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "fecha_entrega")
     private Date fechaEntrega;
 
     @NotNull
