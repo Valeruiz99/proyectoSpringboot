@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${titulo}"></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Spring Boot</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/listar}">Cliente</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/listarProductos}">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/listarpedido}">Pedidos</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="text-secundary border border-primary" th:text="${titulo}"></h1>
+
+    <div th:object="${encabezadoPedido}" th:remove="tag">
+      <ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+        <li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+      </ul>
+    </div>
+
+    <form th:action="@{/formpedido}" th:object="${encabezadoPedido}" method="post"><!--El action envía algo. el object dice qué enviar-->
+
+      <!--<table class="table table-striped">
+        <tr>
+          <td>Id</td>
+          <td><input type="number" th:field="*{id}"></td>
+        </tr>
+        <tr>
+          <td>Nombre</td>
+          <td><input type="text" th:field="*{nombre}" class="form-control"></td>
+          Con el asterisco llamamos los campos, con el @ las url y el signo $ para las variables
+        </tr>
+        <tr>
+          <td>Apellido</td>
+          <td><input type="text" th:field="*{apellido}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td><input type="email" th:field="*{correo}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td>Fecha</td>
+          <td><input type="text" th:field="*{CreateAt}" class="form-control"></td>
+        </tr>
+        <tr>
+          <td><input type="submit" value="Crear cliente" class="btn btn-primary"></td>
+        </tr>
+      </table>-->
+      <div class="form-group">
+        <label class="col-ms-2 col-form-label">Id Cliente</label>
+        <div class="col-ms-6">
+          <input type="number" th:field="*{id}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Fecha</label>
+        <div class="col-ms-6">
+          <input type="date" th:field="*{fecha}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Celular de destinatario</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{celularDestino}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('celularDestino')}" th:errors="*{celularDestino}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Dirección de envío</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{direccionDestino}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('direccionDestino')}" th:errors="*{direccionDestino}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Nombre del destinatario</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{nombreDestino}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('nombreDestino')}" th:errors="*{nombreDestino}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Subtotal</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{subtotal}" class="form-control" th:errorclass="'form-control alert-danger'" readonly/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('subtotal')}" th:errors="*{subtotal}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Total</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{total}" class="form-control" th:errorclass="'form-control alert-danger'" readonly/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('total')}" th:errors="*{total}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Descuento</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{descuento}" class="form-control" th:errorclass="'form-control alert-danger'" readonly/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('descuento')}" th:errors="*{descuento}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Fecha de entrega</label>
+        <div class="col-ms-6">
+          <input type="date" th:field="*{fechaEntrega}" class="form-control" th:errorclass="'form-control alert-danger'"/>
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('fechaEntrega')}" th:errors="*{fechaEntrega}"></label>
+        </div>
+        <label class="col-ms-2 col-form-label">Estado</label>
+        <div class="col-ms-6">
+          <input type="text" th:field="*{estado}" class="form-control" th:errorclass="'form-control alert-danger'" readonly />
+          <label class="form-text text-danger" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></label>
+        </div>
+        <div class="col-ms-6" style="padding-top: 2%;">
+          <input type="submit" value="Guardar" class="btn btn-primary">
+        </div>
+        <input type="hidden" th:field="*{idEncabezadoPedido}"/>
+      </div>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
